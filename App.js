@@ -2,7 +2,8 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { createStackNavigator, createAppContainer  } from 'react-navigation';
 
-import LoginScreen from './Screens/LoginScreen'
+import LoginScreen from './Screens/LoginScreen';
+import SplashScreen from './Screens/SplashScreen';
 
 // export default class App extends React.Component {
 //   render() {
@@ -13,6 +14,12 @@ import LoginScreen from './Screens/LoginScreen'
 // }
 
 const AppStackNavigator = createStackNavigator({
+  SplashScreen: { 
+    screen: SplashScreen,
+    navigationOptions: {
+      header: null
+    }
+  },
   LoginScreen: { 
     screen: LoginScreen,
     navigationOptions: {
