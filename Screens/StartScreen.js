@@ -14,23 +14,30 @@ import {
 } from 'react-native';
 
 import { Icon } from 'native-base'
-
-const SCREEN_HEIGHT = Dimensions.get('window').height
-
 import * as Animatable from 'react-native-animatable'
+import ConnectWithSocials from '../Components/Start/ConnectWithSocials'
 
-class LoginScreen extends Component {
+// variables
+const SCREEN_HEIGHT = Dimensions.get('window').height
+const LOGIN_BACK_BTN_HEIGHT = 60;
+const LOGIN_HEIGHT = 150;
+const SOCIAL_CONNECT_HEIGHT = 70;
+
+
+class StartScreen extends Component {
 
   constructor(){
     super()
 
     this.state = {
-      placeholderText: 'Enter your mobile number'
+      placeholderText: 'Enter your mobile number',
+      displaySocialConnectLink: 'flex',
     }
   }
 
   componentWillMount(){
-    this.loginHeight = new Animated.Value(150)
+    this.loginHeight = new Animated.Value(LOGIN_HEIGHT)
+    this.socialConnectHeight = new Animated.Value(SOCIAL_CONNECT_HEIGHT)
 
     this.keyboardWillShowListener = Keyboard.addListener('keyboardWillShow', this.keyboardWillShow)
     this.keyboardWillHideListener = Keyboard.addListener('keyboardWillHide', this.keyboardWillHide)
@@ -99,14 +106,55 @@ class LoginScreen extends Component {
   }
 
   decreaseHeightOfLogin = () => {
+    this.setState({placeholderText: "Enter your mobile number"})
     Keyboard.dismiss()
     Animated.timing(this.loginHeight, {
-      toValue: 150,
+      toValue: LOGIN_HEIGHT,
       duration: 500
     }).start()
   }
 
+  _showConnectWithSocialSection = () => {
+
+    this.setState({ displaySocialConnectLink: "none",})
+    
+    Animated.parallel([
+      // increase social connect height
+      Animated.timing(this.socialConnectHeight, {
+        toValue: SCREEN_HEIGHT,
+        duration: 500
+      }),
+
+      // set login height to zero
+      Animated.timing(this.loginHeight, {
+        toValue: 0,
+        duration: 500
+      })
+    ]).start()
+  }
+
+  _hideConnectWithSocialSection = () => {
+    this.setState({ displaySocialConnectLink: "flex"})
+
+    Animated.parallel([
+      // set social connect height to default
+      Animated.timing(this.socialConnectHeight, {
+        toValue: SOCIAL_CONNECT_HEIGHT,
+        duration: 500
+      }),
+
+      // set login height to default
+      Animated.timing(this.loginHeight, {
+        toValue: LOGIN_HEIGHT,
+        duration: 500
+      })
+    ]).start()
+    
+  }
+
   render() {
+
+    // interpolate loginHeight
 
     const headerTextOpacity = this.loginHeight.interpolate({
       inputRange: [150, SCREEN_HEIGHT],
@@ -138,20 +186,39 @@ class LoginScreen extends Component {
       outputRange: [0,1]
     })
 
+    // interpolate social_connect_back_arrow
+
+    const loginBackBtnHeight = this.socialConnectHeight.interpolate({
+      inputRange: [150, SCREEN_HEIGHT],
+      outputRange: [LOGIN_BACK_BTN_HEIGHT, 0]
+    })
+
+    const loginContainerHeight = this.socialConnectHeight.interpolate({
+      inputRange: [150, SCREEN_HEIGHT],
+      outputRange: [LOGIN_BACK_BTN_HEIGHT, 0]
+    })
+
+    const socialConnectBackArrowOpacity = this.socialConnectHeight.interpolate({
+      inputRange: [150, SCREEN_HEIGHT],
+      outputRange: [0,1]
+    })
+
     return (
       <View style={{flex:1}}>
 
-      <Animated.View style={{position: "absolute", height: 60, width: 60, top: 60, left: 25, zIndex: 100, opacity: headerBackArrowOpacity}}>
-        <TouchableOpacity
-          onPress= {()=>this.decreaseHeightOfLogin()}>
-          <Icon name="md-arrow-back" style={{color: 'black'}} />
-        </TouchableOpacity>
-      </Animated.View>
+        <Animated.View style={{position: "absolute", height: loginBackBtnHeight, width: 60, top: 60, left: 25, zIndex: 100}}>
+          <Animated.View style = {{ opacity: headerBackArrowOpacity }}>
+            <TouchableOpacity onPress= {()=>this.decreaseHeightOfLogin()}>
+              <Icon name="md-arrow-back" style={{color: 'black'}} />
+            </TouchableOpacity>
+          </Animated.View>
+        </Animated.View>
 
-      <Animated.View
-        style={{position:"absolute", height: 60, width:60, right:10, bottom: this.keyboardHeight, opacity: this.forwardArrowOpacity, zIndex:500, backgroundColor: '#54575e', alignItems: 'center', justifyContent: 'center', borderRadius: 30}}>
-        <Icon name="md-arrow-forward" style={{color: "white"}} />
-      </Animated.View>
+        {/* this is the next button */}
+        <Animated.View
+          style={{position:"absolute", height: 60, width:60, right:10, bottom: this.keyboardHeight, opacity: this.forwardArrowOpacity, zIndex:500, backgroundColor: '#54575e', alignItems: 'center', justifyContent: 'center', borderRadius: 30}}>
+          <Icon name="md-arrow-forward" style={{color: "white"}} />
+        </Animated.View>
 
         <ImageBackground
           source={require("../assets/bg.jpg")}
@@ -167,14 +234,14 @@ class LoginScreen extends Component {
 
           {/* this is the bottom half */}
           <Animatable.View animation="slideInUp" iterationCount={1}>
-            <Animated.View style={{height:this.loginHeight, backgroundColor:'white'}}>
+            <Animated.View style={{height: this.loginHeight, backgroundColor:'white'}}>
               <Animated.View style={{opacity: headerTextOpacity, alignItems:'flex-start', paddingHorizontal: 25, marginTop: marginTop}}>
                 <Text style={{fontSize: 24}}>Get moving with FixDRide</Text>
               </Animated.View>
 
               <TouchableOpacity
                 onPress = {()=> this.increaseHeightOfLogin()}>
-                <Animated.View style={{marginTop:marginTop, paddingHorizontal: 25, flexDirection: 'row'}}>
+                <Animated.View style={{marginTop: marginTop, paddingHorizontal: 25, flexDirection: 'row'}}>
                   <Animated.Text style={{fontSize:24, color: 'gray', position: 'absolute', bottom: titleTextBottom, left: titleTextLeft, opacity: titleTextOpacity}}>Enter your mobile number</Animated.Text>
                   <Image style={{height:24,width:24, resizeMode:'contain'}} source={require('../assets/ng-flag.jpg')} />
                   <Animated.View pointerEvents="none" style={{flexDirection: 'row', flex:1, borderBottomWidth: this.borderBottomWidth}}>
@@ -184,21 +251,26 @@ class LoginScreen extends Component {
                 </Animated.View>
               </TouchableOpacity>
             </Animated.View>
-
-            <View style={{height:70, backgroundColor: 'white', alignItems: 'flex-start', borderTopColor: '#e8e8ec', borderTopWidth: 1, paddingHorizontal: 25}}>
-              <Text style={{color:'#5a7fdf', fontWeight: 'bold'}}>or connect using a social account</Text>
-            </View>
           </Animatable.View>
+          
+          {/* connect with socials link here */}
+          <ConnectWithSocials 
+            onPressLink = { this._showConnectWithSocialSection } 
+            onPressBackLink = { this._hideConnectWithSocialSection }
+            displayLink = { this.state.displaySocialConnectLink }
+            height = { this.socialConnectHeight }
+            opacity = {socialConnectBackArrowOpacity}
+          />
         </ImageBackground>
       </View>
     )
   }
 }
 
-export default LoginScreen;
+export default StartScreen;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1
-  }
+  },
 })

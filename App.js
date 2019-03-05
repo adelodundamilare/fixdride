@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { createStackNavigator, createAppContainer  } from 'react-navigation';
 
-import LoginScreen from './Screens/LoginScreen';
+import StartScreen from './Screens/StartScreen';
 import SplashScreen from './Screens/SplashScreen';
 
 // export default class App extends React.Component {
@@ -20,8 +20,8 @@ const AppStackNavigator = createStackNavigator({
       header: null
     }
   },
-  LoginScreen: { 
-    screen: LoginScreen,
+  StartScreen: { 
+    screen: StartScreen,
     navigationOptions: {
       header: null
     }
