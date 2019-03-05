@@ -12,6 +12,8 @@ import {
 import * as Animatable from 'react-native-animatable'
 import { Icon } from 'native-base'
 
+import GoBackButton from './GoBackButton';
+
 class ConnectWithSocials extends Component {
 
   constructor(){
@@ -42,13 +44,13 @@ class ConnectWithSocials extends Component {
 
     return (
       <Animatable.View animation="slideInUp" iterationCount={1} style={styles.container}>
-
-        {/* this is the header bar, hidden at first glance */}
-        <Animated.View style={[styles.backButton, {opacity: opacity}]}>
-          <TouchableOpacity onPress= { onPressBackLink }>
-            <Icon name="md-arrow-back" style={{color: 'black'}} />
-          </TouchableOpacity>
-        </Animated.View>
+        
+        {/* go back button */}
+        <GoBackButton 
+          opacity={opacity} 
+          goBackMethod={onPressBackLink} 
+          height={height} 
+        />
 
         <View>
           <Animated.View style={{ height: height }}>
@@ -108,17 +110,9 @@ const styles = StyleSheet.create({
     color:'#5a7fdf', 
     fontWeight: 'bold'
   },
-  backButton: {
-    position: "absolute", 
-    height: 60, 
-    width: 60, 
-    top: 60, 
-    left: 25, 
-    zIndex: 100,
-  },
   innerContent: {
     zIndex: 100,
-    marginTop: 100,
+    marginTop: 150,
     left: 25,
   },
   screen_title: {
@@ -126,7 +120,7 @@ const styles = StyleSheet.create({
     color: 'gray',
   },
   social_icons: {
-    marginVertical: 20,
+    marginVertical: 50,
   },
   social_view: {
     flexDirection: 'row',
@@ -143,7 +137,7 @@ const styles = StyleSheet.create({
     resizeMode:'contain'
   },
   footer_text: {
-    marginTop: 30,
+    marginTop: 50,
   }
 });
 
