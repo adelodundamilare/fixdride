@@ -3,6 +3,7 @@ import {
   StyleSheet,
   Text,
   View,
+  Image,
   Animated,
   TouchableOpacity,
 } from 'react-native';
@@ -63,16 +64,26 @@ class ConnectWithSocials extends Component {
 
             {/* connect with socials pages */}
             <Animated.View style={[styles.innerContent, {opacity: opacity}]}>
-              <Text>Choose an account</Text>
+              <Text style={styles.screen_title}>Choose an account</Text>
 
-              <View>
+              <View style={styles.social_icons}>
                 <TouchableOpacity>
-                  <Text>Facebook</Text>
+                  <View style={styles.social_view}>
+                    <Image style={styles.social_image} source={require('../../assets/fb_icon.png')} />
+                    <Text style={styles.social_text}>Facebook</Text>
+                  </View>
                 </TouchableOpacity>
 
                 <TouchableOpacity>
-                  <Text>Google</Text>
+                  <View style={styles.social_view}>
+                    <Image style={styles.social_image} source={require('../../assets/google_icon.png')} />
+                    <Text style={styles.social_text}>Google</Text>
+                  </View>
                 </TouchableOpacity>
+
+                <Text style={styles.footer_text}>
+                  By clicking on a social option yo ma receive an SMS for verification. Message and data rates may apply.
+                </Text>
               </View>
             </Animated.View>
           </Animated.View>
@@ -107,7 +118,32 @@ const styles = StyleSheet.create({
   },
   innerContent: {
     zIndex: 100,
-    marginTop: 200,
+    marginTop: 100,
+    left: 25,
+  },
+  screen_title: {
+    fontSize:24, 
+    color: 'gray',
+  },
+  social_icons: {
+    marginVertical: 20,
+  },
+  social_view: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  social_text: {
+    fontSize: 16,
+    marginVertical: 10,
+    marginLeft: 20,
+  },
+  social_image: {
+    height:24,
+    width:24, 
+    resizeMode:'contain'
+  },
+  footer_text: {
+    marginTop: 30,
   }
 });
 
