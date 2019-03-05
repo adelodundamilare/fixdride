@@ -8,7 +8,7 @@ class SplashScreen extends Component {
   componentDidMount() {
     setTimeout(()=>{
       // go to next screen
-      this.props.navigation.navigate('LoginScreen')
+      this.props.navigation.navigate('StartScreen')
     }, 2500)
   }
 
