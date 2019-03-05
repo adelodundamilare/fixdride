@@ -20,7 +20,7 @@ const SCREEN_HEIGHT = Dimensions.get('window').height
 const LOGIN_BACK_BTN_HEIGHT = 60;
 const LOGIN_HEIGHT = 150;
 const SOCIAL_CONNECT_HEIGHT = 70;
-
+const DURATION = 500
 
 class StartScreen extends Component {
 
@@ -97,7 +97,7 @@ class StartScreen extends Component {
     this.setState({placeholderText: "08099868604"})
     Animated.timing(this.loginHeight, {
       toValue: SCREEN_HEIGHT,
-      duration: 500
+      duration: DURATION
     }).start(()=>{
       // this.refs.textInputMobile.focus()
     })
@@ -108,7 +108,7 @@ class StartScreen extends Component {
     Keyboard.dismiss()
     Animated.timing(this.loginHeight, {
       toValue: LOGIN_HEIGHT,
-      duration: 500
+      duration: DURATION
     }).start()
   }
 
@@ -120,13 +120,13 @@ class StartScreen extends Component {
       // increase social connect height
       Animated.timing(this.socialConnectHeight, {
         toValue: SCREEN_HEIGHT,
-        duration: 500
+        duration: DURATION
       }),
 
       // set login height to zero
       Animated.timing(this.loginHeight, {
         toValue: 0,
-        duration: 500
+        duration: DURATION
       })
     ]).start()
   }
@@ -138,13 +138,13 @@ class StartScreen extends Component {
       // set social connect height to default
       Animated.timing(this.socialConnectHeight, {
         toValue: SOCIAL_CONNECT_HEIGHT,
-        duration: 500
+        duration: DURATION
       }),
 
       // set login height to default
       Animated.timing(this.loginHeight, {
         toValue: LOGIN_HEIGHT,
-        duration: 500
+        duration: DURATION
       })
     ]).start()
     
@@ -191,11 +191,6 @@ class StartScreen extends Component {
       outputRange: [LOGIN_BACK_BTN_HEIGHT, 0]
     })
 
-    const loginContainerHeight = this.socialConnectHeight.interpolate({
-      inputRange: [150, SCREEN_HEIGHT],
-      outputRange: [LOGIN_BACK_BTN_HEIGHT, 0]
-    })
-
     const socialConnectBackArrowOpacity = this.socialConnectHeight.interpolate({
       inputRange: [150, SCREEN_HEIGHT],
       outputRange: [0,1]
@@ -203,7 +198,7 @@ class StartScreen extends Component {
 
     return (
       <View style={{flex:1}}>
-      
+
         {/* this is the next button */}
         <Animated.View
           style={{position:"absolute", height: 60, width:60, right:10, bottom: this.keyboardHeight, opacity: this.forwardArrowOpacity, zIndex:500, backgroundColor: '#54575e', alignItems: 'center', justifyContent: 'center', borderRadius: 30}}>
