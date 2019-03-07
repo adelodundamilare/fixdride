@@ -30,22 +30,47 @@ class SelectCountry extends Component {
       }
     })
     .sort((prev,cur)=> (prev.name.common > cur.name.common) ? 1: -1 )
-    .map((item, index)=>{
+    .map((item)=>{
       if(flags.hasOwnProperty(item.cca2)){
-        const countryInfo = {image: flags[item.cca2], name: `${item.name.common} (+${item.callingCode})`};
-        return (
-          this._renderSingleCountry(countryInfo, index)
-        )
+        return countryInfo = {
+          image: flags[item.cca2], 
+          name: `${item.name.common} (+${item.callingCode})`, 
+          group: item.name.common.charAt(0)
+        };
       }
     })
-    
+    .reduce((total, item) =>{ //group countries based on first char
+      if(!total[item.group]) { total[item.group] = [] }
+      total[item.group].push({ image: item.image, name: item.name })
+      return total
+    }, {})
+
     return country;
+  }
+
+  _renderCountries(countries, flags){
+    const items = this._getCountries(countries, flags)
+
+    return Object.entries(items).map((item, index)=>{
+      return (
+        <Animated.View key={index}>
+          <Animated.View style={styles.country_title_view}>
+            <Text style={styles.country_title}>{item[0]}</Text>
+          </Animated.View>
+          {
+            item[1].map((obj, key)=>{
+              return this._renderSingleCountry(obj, key)
+            })
+          }
+        </Animated.View>
+      )
+    })
   }
 
   _renderSingleCountry(item, index){
     return (
       <TouchableOpacity key={index}>
-        <Animated.View style={{flexDirection: 'row', alignItems: 'center', padding: 20}}>
+        <Animated.View style={{flexDirection: 'row', alignItems: 'center', padding: 20, backgroundColor: 'white'}}>
           <Image style={{width:24, height:24, resizeMode: 'contain'}} source={{uri: item.image}} />
           <Text style={{fontSize: 16, marginLeft: 20}}>{item.name}</Text>
         </Animated.View>
@@ -98,10 +123,9 @@ class SelectCountry extends Component {
 
           {/* get all countries */}
           <Animated.View>
-            <Animated.View style={styles.country_title_view}>
-              <Text style={styles.country_title}>{'A'.toUpperCase()}</Text>
-            </Animated.View>
-            { this._getCountries(countries, flags) }
+            {/* { this._getCountries(countries, flags) } */}
+            {/* { console.log(this._getCountries(countries, flags)) } */}
+            { this._renderCountries(countries, flags) }
           </Animated.View>
         </ScrollView>
 
