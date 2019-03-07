@@ -4,9 +4,6 @@ import {
   Text, 
   StyleSheet, 
   ImageBackground, 
-  TextInput, 
-  TouchableOpacity, 
-  Image,
   Animated,
   Dimensions,
   Keyboard,
@@ -16,13 +13,14 @@ import {
 import { Icon } from 'native-base'
 import * as Animatable from 'react-native-animatable'
 import ConnectWithSocials from '../Components/Start/ConnectWithSocials'
+import InputPhoneNumber from '../Components/Start/InputPhoneNumber';
 
 // variables
 const SCREEN_HEIGHT = Dimensions.get('window').height
 const LOGIN_BACK_BTN_HEIGHT = 60;
 const LOGIN_HEIGHT = 150;
 const SOCIAL_CONNECT_HEIGHT = 70;
-
+const DURATION = 500
 
 class StartScreen extends Component {
 
@@ -99,9 +97,9 @@ class StartScreen extends Component {
     this.setState({placeholderText: "08099868604"})
     Animated.timing(this.loginHeight, {
       toValue: SCREEN_HEIGHT,
-      duration: 500
+      duration: DURATION
     }).start(()=>{
-      this.refs.textInputMobile.focus()
+      // this.refs.textInputMobile.focus()
     })
   }
 
@@ -110,7 +108,7 @@ class StartScreen extends Component {
     Keyboard.dismiss()
     Animated.timing(this.loginHeight, {
       toValue: LOGIN_HEIGHT,
-      duration: 500
+      duration: DURATION
     }).start()
   }
 
@@ -122,13 +120,13 @@ class StartScreen extends Component {
       // increase social connect height
       Animated.timing(this.socialConnectHeight, {
         toValue: SCREEN_HEIGHT,
-        duration: 500
+        duration: DURATION
       }),
 
       // set login height to zero
       Animated.timing(this.loginHeight, {
         toValue: 0,
-        duration: 500
+        duration: DURATION
       })
     ]).start()
   }
@@ -140,13 +138,13 @@ class StartScreen extends Component {
       // set social connect height to default
       Animated.timing(this.socialConnectHeight, {
         toValue: SOCIAL_CONNECT_HEIGHT,
-        duration: 500
+        duration: DURATION
       }),
 
       // set login height to default
       Animated.timing(this.loginHeight, {
         toValue: LOGIN_HEIGHT,
-        duration: 500
+        duration: DURATION
       })
     ]).start()
     
@@ -193,11 +191,6 @@ class StartScreen extends Component {
       outputRange: [LOGIN_BACK_BTN_HEIGHT, 0]
     })
 
-    const loginContainerHeight = this.socialConnectHeight.interpolate({
-      inputRange: [150, SCREEN_HEIGHT],
-      outputRange: [LOGIN_BACK_BTN_HEIGHT, 0]
-    })
-
     const socialConnectBackArrowOpacity = this.socialConnectHeight.interpolate({
       inputRange: [150, SCREEN_HEIGHT],
       outputRange: [0,1]
@@ -205,14 +198,6 @@ class StartScreen extends Component {
 
     return (
       <View style={{flex:1}}>
-
-        <Animated.View style={{position: "absolute", height: loginBackBtnHeight, width: 60, top: 60, left: 25, zIndex: 100}}>
-          <Animated.View style = {{ opacity: headerBackArrowOpacity }}>
-            <TouchableOpacity onPress= {()=>this.decreaseHeightOfLogin()}>
-              <Icon name="md-arrow-back" style={{color: 'black'}} />
-            </TouchableOpacity>
-          </Animated.View>
-        </Animated.View>
 
         {/* this is the next button */}
         <Animated.View
@@ -232,26 +217,22 @@ class StartScreen extends Component {
             </Animatable.View>
           </View>
 
-          {/* this is the bottom half */}
-          <Animatable.View animation="slideInUp" iterationCount={1}>
-            <Animated.View style={{height: this.loginHeight, backgroundColor:'white'}}>
-              <Animated.View style={{opacity: headerTextOpacity, alignItems:'flex-start', paddingHorizontal: 25, marginTop: marginTop}}>
-                <Text style={{fontSize: 24}}>Get moving with FixDRide</Text>
-              </Animated.View>
-
-              <TouchableOpacity
-                onPress = {()=> this.increaseHeightOfLogin()}>
-                <Animated.View style={{marginTop: marginTop, paddingHorizontal: 25, flexDirection: 'row'}}>
-                  <Animated.Text style={{fontSize:24, color: 'gray', position: 'absolute', bottom: titleTextBottom, left: titleTextLeft, opacity: titleTextOpacity}}>Enter your mobile number</Animated.Text>
-                  <Image style={{height:24,width:24, resizeMode:'contain'}} source={require('../assets/ng-flag.jpg')} />
-                  <Animated.View pointerEvents="none" style={{flexDirection: 'row', flex:1, borderBottomWidth: this.borderBottomWidth}}>
-                    <Text style={{fontSize:20, paddingHorizontal:10}}>+234</Text>
-                    <TextInput keyboardType="numeric" ref="textInputMobile" style={{flex:1, fontSize: 20}} placeholder={this.state.placeholderText} underlineColorAndroid="transparent" />
-                  </Animated.View>
-                </Animated.View>
-              </TouchableOpacity>
-            </Animated.View>
-          </Animatable.View>
+          {/* input your phone number */}
+          <InputPhoneNumber
+            opacity = {headerBackArrowOpacity}
+            btnHeight = {loginBackBtnHeight}
+            height = { this.loginHeight}
+            marginTop = {marginTop}
+            placeholderText = { this.state.placeholderText }
+            headerOpacity = {headerTextOpacity }
+            borderBottom = { this.borderBottomWidth }
+            titleBottomValue = {titleTextBottom}
+            leftValue = {titleTextLeft}
+            opacityValue = {titleTextOpacity}
+            onRef = "textInputMobile"
+            addPhoneNumber = {()=> this.increaseHeightOfLogin()}
+            goBack = { ()=>this.decreaseHeightOfLogin() }
+          />
           
           {/* connect with socials link here */}
           <ConnectWithSocials 
