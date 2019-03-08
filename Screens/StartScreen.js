@@ -97,7 +97,7 @@ class StartScreen extends Component {
   }
 
   increaseHeightOfLogin = () => {
-    this.setState({placeholderText: "0809 986 8604"})
+    this.setState({placeholderText: "000 000 000"})
     Animated.timing(this.loginHeight, {
       toValue: SCREEN_HEIGHT,
       duration: DURATION
@@ -195,7 +195,9 @@ class StartScreen extends Component {
         duration: DURATION,
         toValue: SCREEN_HEIGHT
       })
-    ]).start()
+    ]).start(()=>{
+      this.childRef.focus()
+    })
   }
 
   render() {

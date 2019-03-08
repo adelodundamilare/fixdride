@@ -54,9 +54,6 @@ class InputPhoneNumber extends Component {
     return;
   }
 
-  _getCurrentLocation(){
-  }
-
   getCountryCallCode(input){
     const re = /\((.*)\)/;
     const callCode = (input.match(re)[1])
@@ -80,8 +77,9 @@ class InputPhoneNumber extends Component {
       opacityValue,
       onRef,
 
+      // select country props
       showSelectCountryMethod,
-      hideSelectCountryMethod,
+      hideSelectCountryMethod, //used above
       selectCountryHeight,
       selectCountryOpacity,
     } = this.props
@@ -135,7 +133,7 @@ class InputPhoneNumber extends Component {
         <SelectCountry 
           height={ selectCountryHeight }
           opacity = { selectCountryOpacity }
-          goBack = { this._hideSelectCountry }
+          goBack = { hideSelectCountryMethod }
           location = { this.state.currentLocation.id }
           clickCountry = { this._selectedCountry.bind(this) }
         />

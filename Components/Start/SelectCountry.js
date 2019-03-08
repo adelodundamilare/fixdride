@@ -105,6 +105,10 @@ class SelectCountry extends Component {
     )
   }
 
+  _onScroll(){
+    console.log('scrolling...')
+  }
+
   render() {
 
     const {
@@ -131,7 +135,7 @@ class SelectCountry extends Component {
           <Text style={styles.title}>Select a Country</Text>
         </Animated.View>
 
-        <ScrollView>
+        <ScrollView onScroll={this._onScroll}>
           {
             /* get current location this shouldn't be hardcoded! */
             this._getCurrentLocation(countries, flags, location)
