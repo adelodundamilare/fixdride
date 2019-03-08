@@ -94,12 +94,12 @@ class StartScreen extends Component {
   }
 
   increaseHeightOfLogin = () => {
-    this.setState({placeholderText: "08099868604"})
+    this.setState({placeholderText: "0809 986 8604"})
     Animated.timing(this.loginHeight, {
       toValue: SCREEN_HEIGHT,
       duration: DURATION
     }).start(()=>{
-      // this.refs.textInputMobile.focus()
+      this.childRef.focus()
     })
   }
 
@@ -148,6 +148,11 @@ class StartScreen extends Component {
       })
     ]).start()
     
+  }
+
+  _setRef(ref){
+    this.childRef = ref
+    return
   }
 
   render() {
@@ -229,7 +234,7 @@ class StartScreen extends Component {
             titleBottomValue = {titleTextBottom}
             leftValue = {titleTextLeft}
             opacityValue = {titleTextOpacity}
-            onRef = "textInputMobile"
+            onRef = {this._setRef.bind(this)}
             addPhoneNumber = {()=> this.increaseHeightOfLogin()}
             goBack = { ()=>this.decreaseHeightOfLogin() }
           />

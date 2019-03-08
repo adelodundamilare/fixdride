@@ -21,9 +21,46 @@ const DURATION = 500
 
 class InputPhoneNumber extends Component {
 
+  constructor(){
+    super()
+    this.state = {
+      currentLocation: {
+        id: 'NG',
+        code: '+234',
+        imgUrl: require('../../assets/ng-flag.jpg')
+      },
+    }
+  }
+
   componentWillMount(){
     this.height = new Animated.Value(0)
     this.opacity = new Animated.Value(0)
+  }
+
+  _selectedCountry(country){
+    this.props.goBack()
+    this._hideSelectCountry()
+
+    const countryNumberCode = this.getCountryCallCode(country.name)
+
+    this.setState({
+      currentLocation: {
+        id: country.id,
+        code: countryNumberCode,
+        imgUrl: {uri: country.image}
+      }
+    })
+
+    return;
+  }
+
+  _getCurrentLocation(){
+  }
+
+  getCountryCallCode(input){
+    const re = /\((.*)\)/;
+    const callCode = (input.match(re)[1])
+    return (callCode) ? callCode : this.state.currentLocation.code
   }
 
   _showSelectCountry = () => {
@@ -103,15 +140,15 @@ class InputPhoneNumber extends Component {
                 
                 <TouchableOpacity onPress={ this._showSelectCountry }>
                   <View style={styles.select_country}>
-                    <Image style={styles.flag} source={require('../../assets/ng-flag.jpg')} />
+                    <Image style={styles.flag} source={ this.state.currentLocation.imgUrl } />
                     <Icon name="md-arrow-down" style={styles.icon}/>
                   </View>
                 </TouchableOpacity>
 
                 <Animated.View 
                   pointerEvents="none" 
-                  style={[styles.number_input_container, {borderBottomWidth: borderBottom}]}>
-                  <Text style={styles.country_code}>+234</Text>
+                  style={[styles.number_input_container, { borderBottomWidth: borderBottom }]}>
+                  <Text style={styles.country_code}>{ this.state.currentLocation.code }</Text>
                   <TextInput 
                     keyboardType="numeric" 
                     ref={onRef} 
@@ -130,6 +167,8 @@ class InputPhoneNumber extends Component {
           height={ this.height }
           opacity = { this.opacity }
           goBack = { this._hideSelectCountry }
+          location = { this.state.currentLocation.id }
+          clickCountry = { this._selectedCountry.bind(this) }
         />
       </View>
     );

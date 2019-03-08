@@ -15,6 +15,14 @@ import flags from './CountryFlags'
 
 class SelectCountry extends Component {
 
+  constructor(props){
+    super(props)
+
+    this.state = {
+      currentLocation: props.location
+    }
+  }
+
   _getCountries(countries, flags) {
     const removeCountries = [
       "United States Minor Outlying Islands",
@@ -35,13 +43,14 @@ class SelectCountry extends Component {
         return countryInfo = {
           image: flags[item.cca2], 
           name: `${item.name.common} (+${item.callingCode})`, 
-          group: item.name.common.charAt(0)
+          group: item.name.common.charAt(0),
+          id: item.cca2
         };
       }
     })
     .reduce((total, item) =>{ //group countries based on first char
       if(!total[item.group]) { total[item.group] = [] }
-      total[item.group].push({ image: item.image, name: item.name })
+      total[item.group].push({ image: item.image, name: item.name, id: item.id })
       return total
     }, {})
 
@@ -58,31 +67,40 @@ class SelectCountry extends Component {
             <Text style={styles.country_title}>{item[0]}</Text>
           </Animated.View>
           {
-            item[1].map((obj, key)=>{
-              return this._renderSingleCountry(obj, key)
-            })
-          }
+              item[1].map((obj, key)=>{
+                return (
+                  <TouchableOpacity key={key} onPress={ this.props.clickCountry.bind(this, obj)}>
+                    <Animated.View style={styles.single_country_view}>
+                      <Image style={styles.single_country_img} source={{uri: obj.image}} />
+                      <Text style={styles.single_country_name}>{obj.name}</Text>
+                    </Animated.View>
+                  </TouchableOpacity>
+                )
+              })
+            }
         </Animated.View>
       )
     })
   }
 
-  _renderSingleCountry(item, index){
-    return (
-      <TouchableOpacity key={index}>
-        <Animated.View style={{flexDirection: 'row', alignItems: 'center', padding: 20, backgroundColor: 'white'}}>
-          <Image style={{width:24, height:24, resizeMode: 'contain'}} source={{uri: item.image}} />
-          <Text style={{fontSize: 16, marginLeft: 20}}>{item.name}</Text>
-        </Animated.View>
-      </TouchableOpacity>
-    )
-  }
+  _getCurrentLocation(countries, flags, current){
+    const countryName = Array.from(countries).find(item => (item.cca2 == current) )
 
-  _getCurrentLocation(){
-    return (
-      <Animated.View style={{flexDirection: 'row', alignItems: 'center', padding: 20}}>
-        {/* <Image style={{width:24, height:24, resizeMode: 'contain'}} source={{uri: item.image}} /> */}
-        <Text style={{fontSize: 16, marginLeft: 20}}>Nigeria</Text>
+    const flag = (flags.hasOwnProperty(current)) ? flags[current] : '';
+
+    if(!flag && !countryName) return
+
+    return (      
+      <Animated.View>
+        <Animated.View style={styles.country_title_view}>
+          <Text style={styles.country_title}>{'Current Location'.toUpperCase()}</Text>
+        </Animated.View>
+        
+        <Animated.View style={styles.single_country_view}>
+          <Image style={styles.single_country_img} source={{uri: flag}} />
+          <Text style={styles.single_country_name}>{`${countryName.name.common} (+${countryName.callingCode})`}</Text>
+        </Animated.View>
+
       </Animated.View>
     )
   }
@@ -92,7 +110,8 @@ class SelectCountry extends Component {
     const {
       height,
       opacity,
-      goBack
+      goBack,
+      location,
     } = this.props
 
     return (
@@ -113,20 +132,15 @@ class SelectCountry extends Component {
         </Animated.View>
 
         <ScrollView>
-          {/* get current location */}
-          <Animated.View>
-            <Animated.View style={styles.country_title_view}>
-              <Text style={styles.country_title}>{'Current Location'.toUpperCase()}</Text>
-            </Animated.View>
-            { this._getCurrentLocation() }
-          </Animated.View>
+          {
+            /* get current location this shouldn't be hardcoded! */
+            this._getCurrentLocation(countries, flags, location)
+          }
 
-          {/* get all countries */}
-          <Animated.View>
-            {/* { this._getCountries(countries, flags) } */}
-            {/* { console.log(this._getCountries(countries, flags)) } */}
-            { this._renderCountries(countries, flags) }
-          </Animated.View>
+          {             
+            /* get all countries */
+            this._renderCountries(countries, flags) 
+          }
         </ScrollView>
 
       </Animated.View>
@@ -166,6 +180,21 @@ const styles = StyleSheet.create({
   country_title: {
     textTransform: 'uppercase',
     fontSize: 16,
+  },
+  single_country_view: {
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    padding: 20, 
+    backgroundColor: 'white'
+  },
+  single_country_name: {
+    fontSize: 16, 
+    marginLeft: 20
+  },
+  single_country_img: {
+    width:24, 
+    height:24, 
+    resizeMode: 'contain'
   }
 });
 
