@@ -7,10 +7,9 @@ import {
   Animated,
   Dimensions,
   Keyboard,
-  Platform
+  Platform,
 } from 'react-native';
 
-import { Icon } from 'native-base'
 import * as Animatable from 'react-native-animatable'
 import ConnectWithSocials from '../Components/Start/ConnectWithSocials'
 import InputPhoneNumber from '../Components/Start/InputPhoneNumber';
@@ -249,12 +248,6 @@ class StartScreen extends Component {
     return (
       <View style={{flex:1}}>
 
-        {/* this is the next button */}
-        <Animated.View
-          style={{position:"absolute", height: 60, width:60, right:10, bottom: this.keyboardHeight, opacity: this.forwardArrowOpacity, zIndex:500, backgroundColor: '#54575e', alignItems: 'center', justifyContent: 'center', borderRadius: 30}}>
-          <Icon name="md-arrow-forward" style={{color: "white"}} />
-        </Animated.View>
-
         <ImageBackground
           source={require("../assets/bg.jpg")}
           style= {{flex: 1}}
@@ -280,14 +273,22 @@ class StartScreen extends Component {
             leftValue = {titleTextLeft}
             opacityValue = {titleTextOpacity}
             onRef = {this._setRef.bind(this)}
+            navigation
             addPhoneNumber = {()=> this.increaseHeightOfLogin()}
             goBack = { ()=>this.decreaseHeightOfLogin() }
+
+            // navigation props
+            navigation = { this.props.navigation }
 
             // select country props
             showSelectCountryMethod = { () => this._showSelectCountry() }
             hideSelectCountryMethod = { () => this._hideSelectCountry() }
             selectCountryHeight = {this.selectCountryHeight}
             selectCountryOpacity = {this.selectCountryOpacity}
+
+            // next button props
+            nextButtonKeyboardHeight = {this.keyboardHeight}
+            nextButtonOpacity = {this.forwardArrowOpacity}
           />
           
           {/* connect with socials link here */}
