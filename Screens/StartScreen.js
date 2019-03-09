@@ -8,10 +8,8 @@ import {
   Dimensions,
   Keyboard,
   Platform,
-  TouchableOpacity
 } from 'react-native';
 
-import { Icon } from 'native-base'
 import * as Animatable from 'react-native-animatable'
 import ConnectWithSocials from '../Components/Start/ConnectWithSocials'
 import InputPhoneNumber from '../Components/Start/InputPhoneNumber';
@@ -282,8 +280,12 @@ class StartScreen extends Component {
             leftValue = {titleTextLeft}
             opacityValue = {titleTextOpacity}
             onRef = {this._setRef.bind(this)}
+            navigation
             addPhoneNumber = {()=> this.increaseHeightOfLogin()}
             goBack = { ()=>this.decreaseHeightOfLogin() }
+
+            // navigation props
+            navigation = { this.props.navigation }
 
             // select country props
             showSelectCountryMethod = { () => this._showSelectCountry() }

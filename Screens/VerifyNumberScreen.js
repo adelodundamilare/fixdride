@@ -6,10 +6,14 @@ import {
 class VerifyNumberScreen extends Component {
 
   render() {
+    const { navigation } = this.props;
+    const userCode = (navigation.getParam('userCode')) ? navigation.getParam('userCode') : '';
+    const userNumber = (navigation.getParam('userNumber')) ? navigation.getParam('userNumber') : '';
+
     return (
       <View style={styles.container}>
         <Text>
-          Verify phone number here!
+          Verify phone number here! {`${userCode} ${userNumber}`}
         </Text>
       </View>
     );

@@ -59,10 +59,11 @@ class InputPhoneNumber extends Component {
 
   _verifyNumber(){
     if(this.state.phoneNumber == '') return
-    // get country code
-    // add country code to number and send to next screen.
-    console.log(this.state.phoneNumber, this.state.currentLocation.code)
-    // this.props.navigation.navigate('VerifyNumberScreen')
+    
+    this.props.navigation.navigate('VerifyNumberScreen', {
+      'userCode': this.state.currentLocation.code,
+      'userNumber': this.state.phoneNumber
+    })
   }
 
   render() {
@@ -81,6 +82,8 @@ class InputPhoneNumber extends Component {
       leftValue,
       opacityValue,
       onRef,
+
+      // navigation,
 
       // select country props
       showSelectCountryMethod,
@@ -213,4 +216,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default InputPhoneNumber
+export default InputPhoneNumber;
