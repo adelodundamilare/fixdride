@@ -23,7 +23,8 @@ class InputPhoneNumber extends Component {
       currentLocation: {
         id: 'NG',
         code: '+234',
-        imgUrl: require('../../assets/ng-flag.jpg')
+        imgUrl: require('../../assets/ng-flag.jpg'),
+        phoneNumber: ''
       },
     }
   }
@@ -56,6 +57,14 @@ class InputPhoneNumber extends Component {
     return (callCode) ? callCode : this.state.currentLocation.code
   }
 
+  _verifyNumber(){
+    if(this.state.phoneNumber == '') return
+    // get country code
+    // add country code to number and send to next screen.
+    console.log(this.state.phoneNumber, this.state.currentLocation.code)
+    // this.props.navigation.navigate('VerifyNumberScreen')
+  }
+
   render() {
 
     const {
@@ -78,6 +87,10 @@ class InputPhoneNumber extends Component {
       hideSelectCountryMethod, //used above
       selectCountryHeight,
       selectCountryOpacity,
+
+      // next button props
+      nextButtonOpacity,
+      nextButtonKeyboardHeight,
     } = this.props
 
     return (
@@ -117,6 +130,7 @@ class InputPhoneNumber extends Component {
                     ref={onRef} 
                     style={styles.keyboard_input} 
                     placeholder={placeholderText} 
+                    onChangeText = { (text)=>this.setState({phoneNumber: text}) }
                     underlineColorAndroid="transparent" 
                   />
                 </Animated.View>
@@ -133,6 +147,16 @@ class InputPhoneNumber extends Component {
           location = { this.state.currentLocation.id }
           clickCountry = { this._selectedCountry.bind(this) }
         />
+
+        {/* this is the next button */}
+          <Animated.View style={[styles.button, { 
+            bottom: nextButtonKeyboardHeight, 
+            opacity: nextButtonOpacity
+            }]}>
+            <TouchableOpacity onPress={()=>this._verifyNumber()}>
+              <Icon name="md-arrow-forward" style={{color: "white"}} />
+            </TouchableOpacity>
+          </Animated.View>
       </View>
     );
   }
@@ -175,6 +199,17 @@ const styles = StyleSheet.create({
     flex:1, 
     flexDirection: 'row', 
     alignItems: 'center'
+  },
+  button: {
+    position:"absolute", 
+    height: 60, 
+    width:60, 
+    right:10, 
+    zIndex:500, 
+    backgroundColor: '#54575e', 
+    alignItems: 'center', 
+    justifyContent: 'center', 
+    borderRadius: 30
   }
 });
 

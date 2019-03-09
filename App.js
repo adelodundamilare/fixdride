@@ -2,8 +2,9 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { createStackNavigator, createAppContainer  } from 'react-navigation';
 
-import StartScreen from './Screens/StartScreen';
 import SplashScreen from './Screens/SplashScreen';
+import StartScreen from './Screens/StartScreen';
+import VerifyNumberScreen from './Screens/VerifyNumberScreen';
 
 // export default class App extends React.Component {
 //   render() {
@@ -26,6 +27,12 @@ const AppStackNavigator = createStackNavigator({
       header: null
     }
   },
+  VerifyNumberScreen: {
+    screen: VerifyNumberScreen,
+    navigationOptions: {
+      header: null
+    }
+  }
 })
 
 const styles = StyleSheet.create({

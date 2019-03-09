@@ -7,7 +7,8 @@ import {
   Animated,
   Dimensions,
   Keyboard,
-  Platform
+  Platform,
+  TouchableOpacity
 } from 'react-native';
 
 import { Icon } from 'native-base'
@@ -250,10 +251,11 @@ class StartScreen extends Component {
       <View style={{flex:1}}>
 
         {/* this is the next button */}
-        <Animated.View
-          style={{position:"absolute", height: 60, width:60, right:10, bottom: this.keyboardHeight, opacity: this.forwardArrowOpacity, zIndex:500, backgroundColor: '#54575e', alignItems: 'center', justifyContent: 'center', borderRadius: 30}}>
-          <Icon name="md-arrow-forward" style={{color: "white"}} />
-        </Animated.View>
+          {/* <Animated.View style={[styles.button, { bottom: this.keyboardHeight, opacity: this.forwardArrowOpacity}]}>
+            <TouchableOpacity onPress={()=>this.verifyNumber()}>
+              <Icon name="md-arrow-forward" style={{color: "white"}} />
+            </TouchableOpacity>
+          </Animated.View> */}
 
         <ImageBackground
           source={require("../assets/bg.jpg")}
@@ -288,6 +290,10 @@ class StartScreen extends Component {
             hideSelectCountryMethod = { () => this._hideSelectCountry() }
             selectCountryHeight = {this.selectCountryHeight}
             selectCountryOpacity = {this.selectCountryOpacity}
+
+            // next button props
+            nextButtonKeyboardHeight = {this.keyboardHeight}
+            nextButtonOpacity = {this.forwardArrowOpacity}
           />
           
           {/* connect with socials link here */}
