@@ -15,6 +15,12 @@ import VerifyNumberScreen from './Screens/VerifyNumberScreen';
 // }
 
 const AppStackNavigator = createStackNavigator({
+  VerifyNumberScreen: {
+    screen: VerifyNumberScreen,
+    navigationOptions: {
+      header: null
+    }
+  },
   SplashScreen: { 
     screen: SplashScreen,
     navigationOptions: {
@@ -23,12 +29,6 @@ const AppStackNavigator = createStackNavigator({
   },
   StartScreen: { 
     screen: StartScreen,
-    navigationOptions: {
-      header: null
-    }
-  },
-  VerifyNumberScreen: {
-    screen: VerifyNumberScreen,
     navigationOptions: {
       header: null
     }
