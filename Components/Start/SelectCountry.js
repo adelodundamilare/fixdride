@@ -13,14 +13,21 @@ import { Icon } from 'native-base'
 import countries from 'world-countries'
 import flags from './CountryFlags'
 
+const DURATION = 500
+
 class SelectCountry extends Component {
 
   constructor(props){
     super(props)
 
     this.state = {
-      currentLocation: props.location
+      currentLocation: props.location,
+      scrollY: new Animated.Value(0)
     }
+  }
+
+  componentWillMount(){
+    this.scrollTitleHeight = new Animated.Value(120)
   }
 
   _getCountries(countries, flags) {
@@ -105,11 +112,31 @@ class SelectCountry extends Component {
     )
   }
 
-  _onScroll(){
-    console.log('scrolling...')
-  }
-
   render() {
+
+    const scrollTitleHeight = this.state.scrollY.interpolate({
+      inputRange: [0, 120],
+      outputRange: [120, 80],
+      extrapolate: 'clamp',
+    });
+
+    const scrollTitleFontSize = this.state.scrollY.interpolate({
+      inputRange: [0, 120],
+      outputRange: [24, 20],
+      extrapolate: 'clamp',
+    });
+
+    const scrollTitleLeftGap = this.state.scrollY.interpolate({
+      inputRange: [0, 120],
+      outputRange: [20, 50],
+      extrapolate: 'clamp',
+    });
+
+    const scrollTitleTopGap = this.state.scrollY.interpolate({
+      inputRange: [0, 120],
+      outputRange: [60, 30],
+      extrapolate: 'clamp',
+    });
 
     const {
       height,
@@ -121,7 +148,7 @@ class SelectCountry extends Component {
     return (
       
       <Animated.View style={[styles.container, {height: height, opacity: opacity}]}>
-        <Animated.View style={styles.header}>
+        <Animated.View style={[styles.header, {height: scrollTitleHeight }]}>
           <Animated.View style={styles.icon_box}>
             <TouchableOpacity onPress= { goBack }>
               <Icon name="md-arrow-back" style={styles.icon} />
@@ -132,10 +159,20 @@ class SelectCountry extends Component {
             </TouchableOpacity>
           </Animated.View>
 
-          <Text style={styles.title}>Select a Country</Text>
+          <Animated.Text style={[styles.title, {
+            left: scrollTitleLeftGap, 
+            fontSize: scrollTitleFontSize, 
+            top: scrollTitleTopGap
+            }]}>Select a Country
+            </Animated.Text>
         </Animated.View>
 
-        <ScrollView onScroll={this._onScroll}>
+        <ScrollView 
+        scrollEventThrottle={16}
+        onScroll={Animated.event(
+          [{nativeEvent: {contentOffset: {y: this.state.scrollY}}}]
+        )}
+        >
           {
             /* get current location this shouldn't be hardcoded! */
             this._getCurrentLocation(countries, flags, location)
@@ -158,7 +195,6 @@ const styles = StyleSheet.create({
     zIndex: 300
   },
   header: {
-    height: 120,
     backgroundColor: 'black',
     padding: 20,
   },
@@ -174,8 +210,9 @@ const styles = StyleSheet.create({
     width: 30,
   },
   title: {
-    fontSize: 24,
     color: 'white',
+    borderWidth: 1,
+    position: 'absolute'
   },
   country_title_view: {
     backgroundColor: '#ebebeb',

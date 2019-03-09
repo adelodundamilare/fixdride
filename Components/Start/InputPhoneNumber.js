@@ -6,7 +6,6 @@ import {
   Animated,
   TextInput, 
   StyleSheet,
-  Dimensions,
   TouchableOpacity,
 } from 'react-native';
 
@@ -15,9 +14,6 @@ import { Icon } from 'native-base'
 
 import GoBackButton from './GoBackButton';
 import SelectCountry from './SelectCountry';
-
-const SCREEN_HEIGHT = Dimensions.get('window').height
-const DURATION = 500
 
 class InputPhoneNumber extends Component {
 
