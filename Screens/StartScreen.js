@@ -45,6 +45,9 @@ class StartScreen extends Component {
     this.keyboardHeight = new Animated.Value(0)
     this.forwardArrowOpacity = new Animated.Value(0)
     this.borderBottomWidth = new Animated.Value(0)
+
+    this.selectCountryHeight = new Animated.Value(0)
+    this.selectCountryOpacity = new Animated.Value(0)
   }
 
   keyboardWillShow = (event) => {
@@ -94,12 +97,12 @@ class StartScreen extends Component {
   }
 
   increaseHeightOfLogin = () => {
-    this.setState({placeholderText: "08099868604"})
+    this.setState({placeholderText: "000 000 000"})
     Animated.timing(this.loginHeight, {
       toValue: SCREEN_HEIGHT,
       duration: DURATION
     }).start(()=>{
-      // this.refs.textInputMobile.focus()
+      this.childRef.focus()
     })
   }
 
@@ -109,7 +112,9 @@ class StartScreen extends Component {
     Animated.timing(this.loginHeight, {
       toValue: LOGIN_HEIGHT,
       duration: DURATION
-    }).start()
+    }).start(()=>{
+      this.childRef.focus()
+    })
   }
 
   _showConnectWithSocialSection = () => {
@@ -148,6 +153,51 @@ class StartScreen extends Component {
       })
     ]).start()
     
+  }
+
+  _setRef(ref){
+    this.childRef = ref
+    return
+  }
+
+  _showSelectCountry = () => {
+    
+    Animated.parallel([
+      Animated.timing(this.selectCountryHeight, {
+        duration: DURATION,
+        toValue: SCREEN_HEIGHT
+      }),
+      Animated.timing(this.selectCountryOpacity, {
+        duration: DURATION,
+        toValue: 1
+      }),
+      Animated.timing(this.loginHeight, {
+        duration: DURATION,
+        toValue: 0
+      })
+    ]).start(()=>{
+      this.childRef.blur()
+    })
+  }
+
+  _hideSelectCountry = () => {
+    
+    Animated.parallel([
+      Animated.timing(this.selectCountryHeight, {
+        duration: DURATION,
+        toValue: 0
+      }),
+      Animated.timing(this.selectCountryOpacity, {
+        duration: DURATION,
+        toValue: 0
+      }),
+      Animated.timing(this.loginHeight, {
+        duration: DURATION,
+        toValue: SCREEN_HEIGHT
+      })
+    ]).start(()=>{
+      this.childRef.focus()
+    })
   }
 
   render() {
@@ -229,9 +279,15 @@ class StartScreen extends Component {
             titleBottomValue = {titleTextBottom}
             leftValue = {titleTextLeft}
             opacityValue = {titleTextOpacity}
-            onRef = "textInputMobile"
+            onRef = {this._setRef.bind(this)}
             addPhoneNumber = {()=> this.increaseHeightOfLogin()}
             goBack = { ()=>this.decreaseHeightOfLogin() }
+
+            // select country props
+            showSelectCountryMethod = { () => this._showSelectCountry() }
+            hideSelectCountryMethod = { () => this._hideSelectCountry() }
+            selectCountryHeight = {this.selectCountryHeight}
+            selectCountryOpacity = {this.selectCountryOpacity}
           />
           
           {/* connect with socials link here */}

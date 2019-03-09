@@ -6,7 +6,6 @@ import {
   Animated,
   TextInput, 
   StyleSheet,
-  Dimensions,
   TouchableOpacity,
 } from 'react-native';
 
@@ -16,50 +15,45 @@ import { Icon } from 'native-base'
 import GoBackButton from './GoBackButton';
 import SelectCountry from './SelectCountry';
 
-const SCREEN_HEIGHT = Dimensions.get('window').height
-const DURATION = 500
-
 class InputPhoneNumber extends Component {
+
+  constructor(){
+    super()
+    this.state = {
+      currentLocation: {
+        id: 'NG',
+        code: '+234',
+        imgUrl: require('../../assets/ng-flag.jpg')
+      },
+    }
+  }
 
   componentWillMount(){
     this.height = new Animated.Value(0)
     this.opacity = new Animated.Value(0)
   }
 
-  _showSelectCountry = () => {
-    
-    Animated.parallel([
-      Animated.timing(this.height, {
-        duration: DURATION,
-        toValue: SCREEN_HEIGHT
-      }),
-      Animated.timing(this.opacity, {
-        duration: DURATION,
-        toValue: 1
-      }),
-      Animated.timing(this.props.height, {
-        duration: DURATION,
-        toValue: 0
-      })
-    ]).start()
+  _selectedCountry(country){
+    this.props.goBack()
+    this.props.hideSelectCountryMethod()
+
+    const countryNumberCode = this.getCountryCallCode(country.name)
+
+    this.setState({
+      currentLocation: {
+        id: country.id,
+        code: countryNumberCode,
+        imgUrl: {uri: country.image}
+      }
+    })
+
+    return;
   }
 
-  _hideSelectCountry = () => {
-    
-    Animated.parallel([
-      Animated.timing(this.height, {
-        duration: DURATION,
-        toValue: 0
-      }),
-      Animated.timing(this.opacity, {
-        duration: DURATION,
-        toValue: 0
-      }),
-      Animated.timing(this.props.height, {
-        duration: DURATION,
-        toValue: SCREEN_HEIGHT
-      })
-    ]).start()
+  getCountryCallCode(input){
+    const re = /\((.*)\)/;
+    const callCode = (input.match(re)[1])
+    return (callCode) ? callCode : this.state.currentLocation.code
   }
 
   render() {
@@ -78,6 +72,12 @@ class InputPhoneNumber extends Component {
       leftValue,
       opacityValue,
       onRef,
+
+      // select country props
+      showSelectCountryMethod,
+      hideSelectCountryMethod, //used above
+      selectCountryHeight,
+      selectCountryOpacity,
     } = this.props
 
     return (
@@ -101,17 +101,17 @@ class InputPhoneNumber extends Component {
               <Animated.View style={[styles.number_container, {marginTop: marginTop}]}>
                 <Animated.Text style={[styles.title, {bottom: titleBottomValue, left: leftValue, opacity: opacityValue}]}>Enter your mobile number</Animated.Text>
                 
-                <TouchableOpacity onPress={ this._showSelectCountry }>
+                <TouchableOpacity onPress={ showSelectCountryMethod }>
                   <View style={styles.select_country}>
-                    <Image style={styles.flag} source={require('../../assets/ng-flag.jpg')} />
+                    <Image style={styles.flag} source={ this.state.currentLocation.imgUrl } />
                     <Icon name="md-arrow-down" style={styles.icon}/>
                   </View>
                 </TouchableOpacity>
 
                 <Animated.View 
                   pointerEvents="none" 
-                  style={[styles.number_input_container, {borderBottomWidth: borderBottom}]}>
-                  <Text style={styles.country_code}>+234</Text>
+                  style={[styles.number_input_container, { borderBottomWidth: borderBottom }]}>
+                  <Text style={styles.country_code}>{ this.state.currentLocation.code }</Text>
                   <TextInput 
                     keyboardType="numeric" 
                     ref={onRef} 
@@ -127,9 +127,11 @@ class InputPhoneNumber extends Component {
         </Animatable.View>
 
         <SelectCountry 
-          height={ this.height }
-          opacity = { this.opacity }
-          goBack = { this._hideSelectCountry }
+          height={ selectCountryHeight }
+          opacity = { selectCountryOpacity }
+          goBack = { hideSelectCountryMethod }
+          location = { this.state.currentLocation.id }
+          clickCountry = { this._selectedCountry.bind(this) }
         />
       </View>
     );
