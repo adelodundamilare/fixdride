@@ -248,13 +248,6 @@ class StartScreen extends Component {
     return (
       <View style={{flex:1}}>
 
-        {/* this is the next button */}
-          {/* <Animated.View style={[styles.button, { bottom: this.keyboardHeight, opacity: this.forwardArrowOpacity}]}>
-            <TouchableOpacity onPress={()=>this.verifyNumber()}>
-              <Icon name="md-arrow-forward" style={{color: "white"}} />
-            </TouchableOpacity>
-          </Animated.View> */}
-
         <ImageBackground
           source={require("../assets/bg.jpg")}
           style= {{flex: 1}}
