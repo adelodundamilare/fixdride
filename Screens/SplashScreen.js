@@ -5,11 +5,30 @@ import {
 
 class SplashScreen extends Component {
 
+  constructor(){
+    super()
+  }
+
   componentDidMount() {
+
+    this.animateToNextScreen('StartScreen', 2500)
+  }
+
+  componentDidUpdate(){
+    const theNextScreen = this.props.navigation.getParam('nextScreen');
+    const nextScreen = (theNextScreen) ? theNextScreen : 'StartScreen'
+
+    if( theNextScreen ) {
+      this.animateToNextScreen(theNextScreen, 500)
+    } 
+
+
+  }
+
+  animateToNextScreen(nextScreen, animationTime){
     setTimeout(()=>{
-      // go to next screen
-      this.props.navigation.navigate('StartScreen')
-    }, 2500)
+      this.props.navigation.navigate(nextScreen)
+    }, animationTime)
   }
 
   render() {
