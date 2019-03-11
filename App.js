@@ -1,10 +1,9 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
 import { createStackNavigator, createAppContainer  } from 'react-navigation';
 
 import SplashScreen from './Screens/SplashScreen';
 import StartScreen from './Screens/StartScreen';
 import VerifyNumberScreen from './Screens/VerifyNumberScreen';
+import ShowMapScreen from './Screens/ShowMapScreen';
 
 // export default class App extends React.Component {
 //   render() {
@@ -15,8 +14,8 @@ import VerifyNumberScreen from './Screens/VerifyNumberScreen';
 // }
 
 const AppStackNavigator = createStackNavigator({
-  VerifyNumberScreen: {
-    screen: VerifyNumberScreen,
+  ShowMapScreen: {
+    screen: ShowMapScreen,
     navigationOptions: {
       header: null
     }
@@ -32,16 +31,19 @@ const AppStackNavigator = createStackNavigator({
     navigationOptions: {
       header: null
     }
+  },
+  VerifyNumberScreen: {
+    screen: VerifyNumberScreen,
+    navigationOptions: {
+      header: null
+    }
+  },
+  ShowMapScreen: {
+    screen: ShowMapScreen,
+    navigationOptions: {
+      header: null
+    }
   }
 })
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
 
 export default createAppContainer(AppStackNavigator)

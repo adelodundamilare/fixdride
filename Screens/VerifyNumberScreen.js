@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
 import { 
   StyleSheet, View, Text, TouchableHighlight, TextInput, Keyboard, Animated, Platform,
-  Dimensions
 } from 'react-native';
 
 import { Icon } from 'native-base'
-
-const SCREEN_HEIGHT = Dimensions.get('window').height
 
 class VerifyNumberScreen extends Component {
 
@@ -32,7 +29,7 @@ class VerifyNumberScreen extends Component {
   }
 
   componentDidMount(){
-    this.refs.firstCode.focus()
+    this.refs.firstCode.focus()    
   }
 
   keyboardWillShow = (event) => {
@@ -63,6 +60,12 @@ class VerifyNumberScreen extends Component {
         toValue: 20
       }),
     ]).start()
+  }
+
+  _verifyPhoneNumber(){
+    this.props.navigation.navigate('SplashScreen', {
+      nextScreen: 'ShowMapScreen'
+    })
   }
 
   render() {
@@ -135,7 +138,7 @@ class VerifyNumberScreen extends Component {
         </Animated.View>
 
         <Animated.View style={[styles.footer_button, {bottom: this.keyboardHeight}]}>
-          <TouchableHighlight>
+          <TouchableHighlight onPress={ () => this._verifyPhoneNumber(this) }>
             <View style={styles.button}>
               <Icon style={styles.icon} name="md-arrow-forward" />
             </View>
